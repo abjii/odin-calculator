@@ -26,3 +26,12 @@ function operate(operator, a, b) {
       throw new Error("Invalid operator");
   }
 }
+
+const buttons = document.querySelectorAll("button");
+let x;
+buttons.forEach((button) => {
+  button.addEventListener("click", () => {
+    console.log(button.innerHTML + "clicked");
+    x = button.value;
+  });
+});
