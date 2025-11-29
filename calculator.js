@@ -28,10 +28,25 @@ function operate(operator, a, b) {
 }
 
 const buttons = document.querySelectorAll("button");
-let x;
+const input = document.querySelector("input");
+
+function reset() {
+  let x = (y = operator = input.value = "");
+}
+
+reset();
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    console.log(button.innerHTML + "clicked");
-    x = button.value;
+    if (["+", "-", "*", "/"].includes(button.value)) {
+      operator = button.value;
+      x = Number(input.value);
+    } else if (button.value === "=") {
+      y = Number(input.value);
+      input.value = operate(operator, x, y);
+    } else if (button.value === "clear") reset();
+    else {
+      if (operator != "" && x != "") input.value = "";
+      input.value += button.value;
+    }
   });
 });
