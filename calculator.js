@@ -29,20 +29,32 @@ function operate(operator, a, b) {
 
 const buttons = document.querySelectorAll("button");
 const input = document.querySelector("input");
-
 let x = (y = operator = input.value = "");
 let readyForSecondNumber = false;
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    if (["+", "-", "*", "/"].includes(button.value)) {
-      operator = button.value;
-      x = Number(input.value);
-      readyForSecondNumber = true;
-    } else if (button.value === "=") {
-      y = Number(input.value);
-      input.value = operate(operator, x, y);
-      readyForSecondNumber = false;
+    if (["+", "-", "*", "/", "="].includes(button.value)) {
+      if (button.value !== "=") {
+        if (operator != "" && button.value != operator) {
+          operator = button.value;
+          readyForSecondNumber = true;
+          return;
+        }
+        operator = button.value;
+      }
+      if (x != "" && y != "") {
+        input.value = operate(operator, x, y);
+        x = Number(input.value);
+      } else if (x == "") {
+        x = Number(input.value);
+        readyForSecondNumber = true;
+      } else if (y == "") {
+        y = Number(input.value);
+        input.value = operate(operator, x, y);
+        x = Number(input.value);
+        readyForSecondNumber = true;
+      }
     } else if (button.value === "clear") {
       x = y = operator = input.value = "";
       readyForSecondNumber = false;
@@ -52,6 +64,7 @@ buttons.forEach((button) => {
         readyForSecondNumber = false;
       }
       input.value += button.value;
+      if (y != "" && input.value != y) y = Number(input.value);
     }
   });
 });
