@@ -43,7 +43,7 @@ buttons.forEach((button) => {
         }
         operator = button.value;
       }
-      if (x != "" && y != "") {
+      if (x !== "" && y !== "") {
         input.value = operate(operator, x, y);
         x = Number(input.value);
       } else if (x == "") {
