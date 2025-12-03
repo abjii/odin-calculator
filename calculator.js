@@ -31,43 +31,57 @@ const buttons = document.querySelectorAll("button");
 const input = document.querySelector("input");
 let x = (y = operator = input.value = "");
 let readyForSecondNumber = false;
+let oldOperator = "";
 
 buttons.forEach((button) => {
   button.addEventListener("click", calculate);
 });
 
 function calculate(e) {
-  if (["+", "-", "*", "/", "="].includes(e.target.value)) {
-    if (e.target.value !== "=") {
-      if (operator != "" && e.target.value != operator) {
-        operator = e.target.value;
-        readyForSecondNumber = true;
-        return;
-      }
-      operator = e.target.value;
-    }
+  let val = e.target.value;
+  // if (val is a digit_value ==> set y based on boolean readyForSecondNumber presence);
+  // if (val is an = there must be an x and y set, if pressed multi Times, repeat the opeartion with the last operator);
+  // if (val is an operator + - * / ==>
+  //         if (x not exist) set x and update readyForSecondNumber to get y
+  //         if (y not exist) set y, execute with old operator, and put result in x and set y to empty and readyForSecondNumber, and update operator,
+
+  if (val === "clear") {
+    x = y = operator = oldOperator = input.value = "";
+    readyForSecondNumber = false;
+  } else if (val === "=") {
+    y = Number(input.value);
     if (x !== "" && y !== "") {
       input.value = operate(operator, x, y);
       x = Number(input.value);
       readyForSecondNumber = true;
-    } else if (x == "") {
+    }
+  } else if (["+", "-", "*", "/"].includes(val)) {
+    operator = val;
+    if (x == "") {
       x = Number(input.value);
       readyForSecondNumber = true;
     } else if (y == "") {
       y = Number(input.value);
-      input.value = operate(operator, x, y);
+      input.value = operate(oldOperator, x, y);
       x = Number(input.value);
       readyForSecondNumber = true;
+    } else {
+      if (oldOperator == operator) {
+        input.value = operate(operator, x, y);
+        x = Number(input.value);
+      } else {
+        y = "";
+        readyForSecondNumber = true;
+      }
     }
-  } else if (e.target.value === "clear") {
-    x = y = operator = input.value = "";
-    readyForSecondNumber = false;
+    oldOperator = operator;
   } else {
+    // digit pressed
     if (readyForSecondNumber) {
       input.value = "";
       readyForSecondNumber = false;
     }
-    input.value += e.target.value;
+    input.value += val;
     if (y !== "") y = Number(input.value);
   }
 }
