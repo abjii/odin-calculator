@@ -8,7 +8,7 @@ function multiply(a, b) {
   return a * b;
 }
 function divide(a, b) {
-  if (b === 0) throw new Error("Cannot divide by zero");
+  if (b === 0) alert("Cannot divide by zero");
   return a / b;
 }
 
@@ -33,38 +33,41 @@ let x = (y = operator = input.value = "");
 let readyForSecondNumber = false;
 
 buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    if (["+", "-", "*", "/", "="].includes(button.value)) {
-      if (button.value !== "=") {
-        if (operator != "" && button.value != operator) {
-          operator = button.value;
-          readyForSecondNumber = true;
-          return;
-        }
-        operator = button.value;
-      }
-      if (x !== "" && y !== "") {
-        input.value = operate(operator, x, y);
-        x = Number(input.value);
-      } else if (x == "") {
-        x = Number(input.value);
-        readyForSecondNumber = true;
-      } else if (y == "") {
-        y = Number(input.value);
-        input.value = operate(operator, x, y);
-        x = Number(input.value);
-        readyForSecondNumber = true;
-      }
-    } else if (button.value === "clear") {
-      x = y = operator = input.value = "";
-      readyForSecondNumber = false;
-    } else {
-      if (readyForSecondNumber) {
-        input.value = "";
-        readyForSecondNumber = false;
-      }
-      input.value += button.value;
-      if (y != "" && input.value != y) y = Number(input.value);
-    }
-  });
+  button.addEventListener("click", calculate);
 });
+
+function calculate(e) {
+  if (["+", "-", "*", "/", "="].includes(e.target.value)) {
+    if (e.target.value !== "=") {
+      if (operator != "" && e.target.value != operator) {
+        operator = e.target.value;
+        readyForSecondNumber = true;
+        return;
+      }
+      operator = e.target.value;
+    }
+    if (x !== "" && y !== "") {
+      input.value = operate(operator, x, y);
+      x = Number(input.value);
+      readyForSecondNumber = true;
+    } else if (x == "") {
+      x = Number(input.value);
+      readyForSecondNumber = true;
+    } else if (y == "") {
+      y = Number(input.value);
+      input.value = operate(operator, x, y);
+      x = Number(input.value);
+      readyForSecondNumber = true;
+    }
+  } else if (e.target.value === "clear") {
+    x = y = operator = input.value = "";
+    readyForSecondNumber = false;
+  } else {
+    if (readyForSecondNumber) {
+      input.value = "";
+      readyForSecondNumber = false;
+    }
+    input.value += e.target.value;
+    if (y !== "") y = Number(input.value);
+  }
+}
