@@ -53,7 +53,8 @@ function calculate(e) {
     }
     getY = true;
     oldOperator = val;
-  } else if (val === "=" && x !== "" && y !== "") {
+  } else if (val === "=") {
+    if (x == "" || y == "") return;
     input.value = operate(operator, x, y);
     x = Number(input.value);
     oldOperator = "";
