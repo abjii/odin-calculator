@@ -60,7 +60,7 @@ function calculate(e) {
   } else if (val === "clear") {
     x = y = operator = oldOperator = input.value = "";
   } else {
-    if (oldOperator === "") {
+    if (oldOperator === "" && input.value !== "" && getY) {
       x = y = operator = oldOperator = input.value = "";
       getY = false;
     }
