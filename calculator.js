@@ -9,7 +9,7 @@ function multiply(a, b) {
 }
 function divide(a, b) {
   if (b === 0) alert("Cannot divide by zero");
-  return a / b;
+  else return a / b;
 }
 
 function operate(operator, a, b) {
@@ -32,8 +32,6 @@ const input = document.querySelector("input");
 let x = (y = operator = input.value = "");
 let getY = false;
 let oldOperator = "";
-let currentVal = "";
-let previousVal = "";
 buttons.forEach((button) => {
   button.addEventListener("click", calculate);
 });
@@ -46,7 +44,7 @@ function calculate(e) {
       x = Number(input.value);
     } else if (x !== "" && y !== "") {
       if (operator == oldOperator || (operator !== oldOperator && !getY)) {
-        input.value = operate(oldOperator, x, y);
+        input.value = Number(operate(oldOperator, x, y).toFixed(16));
         x = Number(input.value);
       }
       if (operator !== oldOperator) y = "";
@@ -54,14 +52,18 @@ function calculate(e) {
     getY = true;
     oldOperator = val;
   } else if (val === "=") {
-    if (x == "" || y == "") return;
-    input.value = operate(operator, x, y);
+    if (x === "" || y === "") return;
+    input.value = Number(operate(operator, x, y).toFixed(16));
     x = Number(input.value);
     oldOperator = "";
     getY = true;
   } else if (val === "clear") {
     x = y = operator = oldOperator = input.value = "";
   } else {
+    if (oldOperator === "") {
+      x = y = operator = oldOperator = input.value = "";
+      getY = false;
+    }
     if (getY) {
       input.value = "";
       getY = false;
