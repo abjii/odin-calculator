@@ -41,18 +41,21 @@ function calculate(e) {
   if (["+", "-", "*", "/"].includes(val)) {
     operator = val;
     if (x === "") {
-      x = Number(input.value);
+      x = Number(input.value); // assigns first operand after operator is clicked
     } else if (x !== "" && y !== "") {
+      // performs calculation if both operands are present
       if (operator == oldOperator || (operator !== oldOperator && !getY)) {
+        //make old calculation only if (operator is same as previous) or if
+        // (operator has changed but second operand is already entered from the previous operation and not freshly entered)
         input.value = Number(operate(oldOperator, x, y).toFixed(16));
         x = Number(input.value);
       }
-      if (operator !== oldOperator) y = "";
+      if (operator !== oldOperator) y = ""; // resets second operand for new operation if operator has changed
     }
     getY = true;
     oldOperator = val;
   } else if (val === "=") {
-    if (x === "" || y === "") return;
+    if (x === "" || y === "") return; // prevents calculation if operands are missing
     input.value = Number(operate(operator, x, y).toFixed(16));
     x = Number(input.value);
     oldOperator = "";
@@ -60,15 +63,17 @@ function calculate(e) {
   } else if (val === "clear") {
     x = y = operator = oldOperator = input.value = "";
   } else {
+    // clears input if starting new calculation after previous result
     if (oldOperator === "" && input.value !== "" && getY) {
       x = y = operator = oldOperator = input.value = "";
       getY = false;
     }
+    // gets an operand
     if (getY) {
       input.value = "";
       getY = false;
     }
     input.value += val;
-    if (x !== "") y = Number(input.value);
+    if (x !== "") y = Number(input.value); // assigns second operand
   }
 }
