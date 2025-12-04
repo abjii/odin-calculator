@@ -30,58 +30,42 @@ function operate(operator, a, b) {
 const buttons = document.querySelectorAll("button");
 const input = document.querySelector("input");
 let x = (y = operator = input.value = "");
-let readyForSecondNumber = false;
+let getY = false;
 let oldOperator = "";
-
+let currentVal = "";
+let previousVal = "";
 buttons.forEach((button) => {
   button.addEventListener("click", calculate);
 });
 
 function calculate(e) {
   let val = e.target.value;
-  // if (val is a digit_value ==> set y based on boolean readyForSecondNumber presence);
-  // if (val is an = there must be an x and y set, if pressed multi Times, repeat the opeartion with the last operator);
-  // if (val is an operator + - * / ==>
-  //         if (x not exist) set x and update readyForSecondNumber to get y
-  //         if (y not exist) set y, execute with old operator, and put result in x and set y to empty and readyForSecondNumber, and update operator,
-
-  if (val === "clear") {
-    x = y = operator = oldOperator = input.value = "";
-    readyForSecondNumber = false;
-  } else if (val === "=") {
-    y = Number(input.value);
-    if (x !== "" && y !== "") {
-      input.value = operate(operator, x, y);
-      x = Number(input.value);
-      readyForSecondNumber = true;
-    }
-  } else if (["+", "-", "*", "/"].includes(val)) {
+  if (["+", "-", "*", "/"].includes(val)) {
     operator = val;
-    if (x == "") {
+    if (x === "") {
       x = Number(input.value);
-      readyForSecondNumber = true;
-    } else if (y == "") {
-      y = Number(input.value);
-      input.value = operate(oldOperator, x, y);
-      x = Number(input.value);
-      readyForSecondNumber = true;
-    } else {
-      if (oldOperator == operator) {
-        input.value = operate(operator, x, y);
+    } else if (x !== "" && y !== "") {
+      if (operator == oldOperator || (operator !== oldOperator && !getY)) {
+        input.value = operate(oldOperator, x, y);
         x = Number(input.value);
-      } else {
-        y = "";
-        readyForSecondNumber = true;
       }
+      if (operator !== oldOperator) y = "";
     }
-    oldOperator = operator;
+    getY = true;
+    oldOperator = val;
+  } else if (val === "=" && x !== "" && y !== "") {
+    input.value = operate(operator, x, y);
+    x = Number(input.value);
+    oldOperator = "";
+    getY = true;
+  } else if (val === "clear") {
+    x = y = operator = oldOperator = input.value = "";
   } else {
-    // digit pressed
-    if (readyForSecondNumber) {
+    if (getY) {
       input.value = "";
-      readyForSecondNumber = false;
+      getY = false;
     }
     input.value += val;
-    if (y !== "") y = Number(input.value);
+    if (x !== "") y = Number(input.value);
   }
 }
