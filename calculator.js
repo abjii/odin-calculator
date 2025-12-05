@@ -45,8 +45,10 @@ function calculate(e) {
     } else if (x !== "" && y !== "") {
       // performs calculation if both operands are present
       if (operator == oldOperator || (operator !== oldOperator && !getY)) {
-        //make old calculation only if (operator is same as previous) or if
-        // (operator has changed but second operand is already entered from the previous operation and not freshly entered)
+        //make old calculation only IF (operator is same as previous) or IF
+        // (operator has changed and second operand is freshly entered, if not
+        // freshly entered (in case of consecutive + + + and then - for example)
+        // we skip this calculation to allow user to enter new second operand)
         input.value = Number(operate(oldOperator, x, y).toFixed(16));
         x = Number(input.value);
       }
@@ -68,6 +70,7 @@ function calculate(e) {
       x = y = operator = oldOperator = input.value = "";
       getY = false;
     }
+    if (input.value.includes(".") && val === ".") return; // prevents multiple decimals
     // gets an operand
     if (getY) {
       input.value = "";
