@@ -1,3 +1,17 @@
+//  Initializations
+const DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
+const OPERATORS = ["+", "-", "*", "/"];
+let x = (y = operator = oldOperator = getY = "");
+
+// Element Selections and Event Listeners
+const buttons = document.querySelectorAll("button");
+const input = document.querySelector("input");
+buttons.forEach((button) => {
+  button.addEventListener("click", calculate);
+});
+document.addEventListener("keydown", calculate);
+
+// Calculation Functions Definitions
 function add(a, b) {
   return a + b;
 }
@@ -11,7 +25,6 @@ function divide(a, b) {
   if (b === 0) alert("Cannot divide by zero");
   else return a / b;
 }
-
 function operate(operator, a, b) {
   switch (operator) {
     case "+":
@@ -26,19 +39,10 @@ function operate(operator, a, b) {
       return "Invalid operator";
   }
 }
-
-const buttons = document.querySelectorAll("button");
-const input = document.querySelector("input");
-let x = (y = operator = input.value = "");
-let getY = false;
-let oldOperator = "";
-buttons.forEach((button) => {
-  button.addEventListener("click", calculate);
-});
-
 function calculate(e) {
   let val = e.target.value;
-  if (["+", "-", "*", "/"].includes(val)) {
+  if (e.type === "keydown") val = e.key;
+  if (OPERATORS.includes(val)) {
     operator = val;
     if (x === "") {
       x = Number(input.value); // assigns first operand after operator is clicked
@@ -54,7 +58,7 @@ function calculate(e) {
     }
     getY = true;
     oldOperator = val;
-  } else if (val === "=") {
+  } else if (val === "=" || val === "Enter") {
     if (x === "" || y === "") return; // prevents calculation if operands are missing
     input.value = Number(operate(operator, x, y).toFixed(16));
     x = Number(input.value);
@@ -62,13 +66,13 @@ function calculate(e) {
     getY = true;
   } else if (val === "clear") {
     x = y = operator = oldOperator = input.value = "";
-  } else if (val === "del" && input.value !== "") {
+  } else if (val === "Backspace" && input.value !== "") {
     // deletes last character from input
     input.value = input.value.slice(0, -1);
     if (y !== "" && operator !== "") {
       y = Number(input.value);
     }
-  } else {
+  } else if (DIGITS.includes(val)) {
     // clears input if starting new calculation after previous result
     if (oldOperator === "" && input.value !== "" && getY) {
       x = y = operator = oldOperator = input.value = "";

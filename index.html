@@ -15,6 +15,13 @@
     </header>
     <main>
       <div class="calculator">
+        <!-- <input type="text" id="message" />
+        <script>
+          let textBox = document.getElementById("message");
+          textBox.addEventListener("keyup", (event) => {
+            console.log(`key=${event.key},code=${event.code}`);
+          });
+        </script> -->
         <input type="text" placeholder="0" class="display" readonly />
         <div class="calculator-keys">
           <!-- Block: Numbers -->
@@ -52,7 +59,7 @@
             </div>
             <div class="row">
               <button type="button" value="=" class="btn-equal">=</button>
-              <button type="button" value="del" class="btn-equal">del</button>
+              <button type="button" value="Backspace" class="btn-equal" style="background: #44cdff">del</button>
             </div>
           </div>
         </div>
